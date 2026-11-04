@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" xmlns:color="http://www.omg.org/spec/BPMN/non-normative/color/1.0" id="Definitions_as_is" targetNamespace="http://bpmn.io/schema/bpmn">
+<bpmn:collaboration id="Collab_as_is"><bpmn:participant id="Pool_as_is" name="Приём заявлений: как есть" processRef="Process_as_is" /></bpmn:collaboration>
+<bpmn:process id="Process_as_is" isExecutable="false">
+<bpmn:laneSet id="LaneSet_1">
+<bpmn:lane id="Lane_0" name="Абитуриент">
+<bpmn:flowNodeRef>Start_1</bpmn:flowNodeRef>
+<bpmn:flowNodeRef>Task_submit</bpmn:flowNodeRef>
+<bpmn:flowNodeRef>Task_fix</bpmn:flowNodeRef>
+<bpmn:flowNodeRef>End_1</bpmn:flowNodeRef>
+</bpmn:lane>
+<bpmn:lane id="Lane_1" name="Сотрудник комиссии">
+<bpmn:flowNodeRef>Task_check</bpmn:flowNodeRef>
+<bpmn:flowNodeRef>Gw_errors</bpmn:flowNodeRef>
+<bpmn:flowNodeRef>Task_input</bpmn:flowNodeRef>
+</bpmn:lane>
+<bpmn:lane id="Lane_2" name="Информационная система">
+<bpmn:flowNodeRef>Task_register</bpmn:flowNodeRef>
+<bpmn:flowNodeRef>Task_list</bpmn:flowNodeRef>
+</bpmn:lane>
+</bpmn:laneSet>
+<bpmn:startEvent id="Start_1" name="Решил поступать"><bpmn:outgoing>Flow_1</bpmn:outgoing></bpmn:startEvent>
+<bpmn:task id="Task_submit" name="Подать заявление и документы (Госуслуги, ЛК или лично)"><bpmn:incoming>Flow_1</bpmn:incoming><bpmn:outgoing>Flow_2</bpmn:outgoing></bpmn:task>
+<bpmn:task id="Task_register" name="Зарегистрировать заявление"><bpmn:incoming>Flow_2</bpmn:incoming><bpmn:outgoing>Flow_3</bpmn:outgoing></bpmn:task>
+<bpmn:task id="Task_check" name="Проверить вручную документы, баллы ЕГЭ в ФИС и дубли"><bpmn:incoming>Flow_3</bpmn:incoming><bpmn:incoming>Flow_6</bpmn:incoming><bpmn:outgoing>Flow_4</bpmn:outgoing></bpmn:task>
+<bpmn:exclusiveGateway id="Gw_errors" name="Есть ошибки?"><bpmn:incoming>Flow_4</bpmn:incoming><bpmn:outgoing>Flow_5</bpmn:outgoing><bpmn:outgoing>Flow_7</bpmn:outgoing></bpmn:exclusiveGateway>
+<bpmn:task id="Task_fix" name="Исправить данные по звонку или письму комиссии"><bpmn:incoming>Flow_5</bpmn:incoming><bpmn:outgoing>Flow_6</bpmn:outgoing></bpmn:task>
+<bpmn:task id="Task_input" name="Перенести данные в базу вручную"><bpmn:incoming>Flow_7</bpmn:incoming><bpmn:outgoing>Flow_8</bpmn:outgoing></bpmn:task>
+<bpmn:task id="Task_list" name="Включить в конкурсный список"><bpmn:incoming>Flow_8</bpmn:incoming><bpmn:outgoing>Flow_9</bpmn:outgoing></bpmn:task>
+<bpmn:endEvent id="End_1" name="Заявление принято"><bpmn:incoming>Flow_9</bpmn:incoming></bpmn:endEvent>
+<bpmn:sequenceFlow id="Flow_1" sourceRef="Start_1" targetRef="Task_submit" />
+<bpmn:sequenceFlow id="Flow_2" sourceRef="Task_submit" targetRef="Task_register" />
+<bpmn:sequenceFlow id="Flow_3" sourceRef="Task_register" targetRef="Task_check" />
+<bpmn:sequenceFlow id="Flow_4" sourceRef="Task_check" targetRef="Gw_errors" />
+<bpmn:sequenceFlow id="Flow_5" name="да" sourceRef="Gw_errors" targetRef="Task_fix" />
+<bpmn:sequenceFlow id="Flow_6" sourceRef="Task_fix" targetRef="Task_check" />
+<bpmn:sequenceFlow id="Flow_7" name="нет" sourceRef="Gw_errors" targetRef="Task_input" />
+<bpmn:sequenceFlow id="Flow_8" sourceRef="Task_input" targetRef="Task_list" />
+<bpmn:sequenceFlow id="Flow_9" sourceRef="Task_list" targetRef="End_1" />
+</bpmn:process>
+<bpmndi:BPMNDiagram id="Diagram_as_is"><bpmndi:BPMNPlane id="Plane_as_is" bpmnElement="Collab_as_is">
+<bpmndi:BPMNShape id="Pool_as_is_di" bpmnElement="Pool_as_is" isHorizontal="true"><dc:Bounds x="40" y="40" width="1434" height="450" /></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="Lane_0_di" bpmnElement="Lane_0" isHorizontal="true"><dc:Bounds x="74" y="40" width="1400" height="150" /></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="Lane_1_di" bpmnElement="Lane_1" isHorizontal="true"><dc:Bounds x="74" y="190" width="1400" height="150" /></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="Lane_2_di" bpmnElement="Lane_2" isHorizontal="true"><dc:Bounds x="74" y="340" width="1400" height="150" /></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="Start_1_di" bpmnElement="Start_1"><dc:Bounds x="188" y="97" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="151.0" y="139" width="110" height="28" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="Task_submit_di" bpmnElement="Task_submit"><dc:Bounds x="309" y="79" width="124" height="72" /></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="Task_register_di" bpmnElement="Task_register"><dc:Bounds x="474" y="379" width="124" height="72" /></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="Task_check_di" bpmnElement="Task_check" bioc:stroke="#c0392b" bioc:fill="#fdecea" color:border-color="#c0392b" color:background-color="#fdecea"><dc:Bounds x="639" y="229" width="124" height="72" /></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="Gw_errors_di" bpmnElement="Gw_errors"><dc:Bounds x="841" y="240" width="50" height="50" /><bpmndi:BPMNLabel><dc:Bounds x="811.0" y="296" width="110" height="28" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="Task_fix_di" bpmnElement="Task_fix" bioc:stroke="#c0392b" bioc:fill="#fdecea" color:border-color="#c0392b" color:background-color="#fdecea"><dc:Bounds x="804" y="79" width="124" height="72" /></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="Task_input_di" bpmnElement="Task_input" bioc:stroke="#c0392b" bioc:fill="#fdecea" color:border-color="#c0392b" color:background-color="#fdecea"><dc:Bounds x="969" y="229" width="124" height="72" /></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="Task_list_di" bpmnElement="Task_list"><dc:Bounds x="1134" y="379" width="124" height="72" /></bpmndi:BPMNShape>
+<bpmndi:BPMNShape id="End_1_di" bpmnElement="End_1"><dc:Bounds x="1343" y="97" width="36" height="36" /><bpmndi:BPMNLabel><dc:Bounds x="1306.0" y="63" width="110" height="28" /></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+<bpmndi:BPMNEdge id="Flow_1_di" bpmnElement="Flow_1"><di:waypoint x="224" y="115" /><di:waypoint x="309" y="115" /></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="Flow_2_di" bpmnElement="Flow_2"><di:waypoint x="433" y="115" /><di:waypoint x="536" y="115" /><di:waypoint x="536" y="379" /></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="Flow_3_di" bpmnElement="Flow_3"><di:waypoint x="598" y="415" /><di:waypoint x="701" y="415" /><di:waypoint x="701" y="301" /></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="Flow_4_di" bpmnElement="Flow_4"><di:waypoint x="763" y="265" /><di:waypoint x="841" y="265" /></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="Flow_5_di" bpmnElement="Flow_5"><di:waypoint x="866" y="240" /><di:waypoint x="866" y="151" /><bpmndi:BPMNLabel><dc:Bounds x="870" y="178" width="40" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="Flow_6_di" bpmnElement="Flow_6"><di:waypoint x="804" y="115" /><di:waypoint x="701" y="115" /><di:waypoint x="701" y="229" /></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="Flow_7_di" bpmnElement="Flow_7"><di:waypoint x="891" y="265" /><di:waypoint x="969" y="265" /><bpmndi:BPMNLabel><dc:Bounds x="934" y="247" width="40" height="14" /></bpmndi:BPMNLabel></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="Flow_8_di" bpmnElement="Flow_8"><di:waypoint x="1093" y="265" /><di:waypoint x="1196" y="265" /><di:waypoint x="1196" y="379" /></bpmndi:BPMNEdge>
+<bpmndi:BPMNEdge id="Flow_9_di" bpmnElement="Flow_9"><di:waypoint x="1258" y="415" /><di:waypoint x="1361" y="415" /><di:waypoint x="1361" y="133" /></bpmndi:BPMNEdge>
+</bpmndi:BPMNPlane></bpmndi:BPMNDiagram>
+</bpmn:definitions>
